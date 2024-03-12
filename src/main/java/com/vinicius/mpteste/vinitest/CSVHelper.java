@@ -18,7 +18,6 @@ public class CSVHelper {
              CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);) {
             for (Persons persons : tutorials) {
                 List<? extends Serializable> data = Arrays.asList(
-                        String.valueOf(persons.getId()),
                         persons.getNome(),
                         persons.getUltimoNome(),
                         persons.getIdade(),
