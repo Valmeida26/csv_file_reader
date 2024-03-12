@@ -54,14 +54,20 @@ Endpoints de gerenciamento de usuários do banco:
 
 Endpoint 1:
      Endpoint destinado a cadastrar usuários na aplicação, por padrão todo usuário criado no banco tem permissões de editar apenas o próprio usuário e permissões de editar e olhar os dados dos clientes do banco de dados populados a partir do arquivo CSV. Caso queira ter permissões de administrador sugiro que vá no seu banco de dados, na tabela (user_profile) e altere o valor na coluna (profile) de 2 para 1, assim você obterá acesso de administrador no sistema.    
-    - Método HTTP: `POST`
-    - URL: /user
-    - Exemplo de uso:
-        No postman, em Body - Raw, use esse modelo de texto: 
+    
+- Método HTTP: `POST`
+   
+ - URL: /user
+   
+ - Exemplo de uso:
+        
+No postman, em Body - Raw, use esse modelo de texto: 
+	
 	{
     	    "username": "seuNome",
             "password": "suaSenha"
 	}
+
     - Result:
         - Será retornado um status code 201 CREATED
 
