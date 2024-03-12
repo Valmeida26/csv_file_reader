@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload CSV</title>
+</head>
+<body>
+<h1>Upload CSV</h1>
+<input type="file" id="csvFile" accept=".csv">
+<button onclick="uploadCSV()">Enviar CSV</button>
+
+<div id="output">
+    <!-- Aqui os dados do CSV serão exibidos -->
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    // Função para fazer a requisição ao backend e processar a resposta
+    function uploadCSV() {
+      // Recuperar o arquivo CSV do input file do HTML
+      var fileInput = document.getElementById('csvFile');
+      var file = fileInput.files[0];
+
+      // Criar um FormData para enviar o arquivo como multipart/form-data
+      var formData = new FormData();
+      formData.append('file', file);
+
+      // Fazer a requisição HTTP POST para o endpoint do backend
+      axios.post('/upload', formData)
+        .then(function (response) {
+          // Se a requisição for bem sucedida, processar a resposta
+          var persons = response.data;
+
+          // Limpar o conteúdo anterior
+          document.getElementById('output').innerHTML = '';
+
+          // Criar uma tabela para exibir os dados
+          var table = document.createElement('table');
+          var thead = table.createTHead();
+          var tbody = table.createTBody();
+          var headerRow = thead.insertRow();
+          var headers = ['Nome', 'Ultimo Nome', 'Idade', 'Sexo', 'Email', 'Data de Nascimento', 'IPAccess'];
+
+          // Criar as colunas do cabeçalho da tabela
+          headers.forEach(function(headerText) {
+            var th = document.createElement('th');
+            th.appendChild(document.createTextNode(headerText));
+            headerRow.appendChild(th);
+          });
+
+          // Preencher a tabela com os dados das pessoas
+          persons.forEach(function(person) {
+            var row = tbody.insertRow();
+            row.insertCell().appendChild(document.createTextNode(person.name));
+            row.insertCell().appendChild(document.createTextNode(person.lastName));
+            row.insertCell().appendChild(document.createTextNode(person.age));
+            row.insertCell().appendChild(document.createTextNode(person.gender));
+            row.insertCell().appendChild(document.createTextNode(person.email));
+            row.insertCell().appendChild(document.createTextNode(person.birthDate));
+          });
+
+          // Adicionar a tabela ao elemento de saída
+          document.getElementById('output').appendChild(table);
+        })
+        .catch(function (error) {
+          // Se ocorrer algum erro na requisição, tratar aqui
+          console.error('Erro ao enviar o arquivo CSV:', error);
+        });
+    }
+  </script>
+</body>
+</html>
