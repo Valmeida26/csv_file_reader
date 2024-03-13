@@ -19,7 +19,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    //chama o endpoint do frontEnd
     @GetMapping("/")
     public String index() {
         return "index";
@@ -36,7 +35,6 @@ public class UserController {
         return ResponseEntity.ok().body(obj);
     }
 
-    // Cria o usuario
     @PostMapping
     public ResponseEntity<Void> create(@Valid @RequestBody User obj){
         this.userService.create(obj);
@@ -44,7 +42,6 @@ public class UserController {
         return ResponseEntity.created(uri).build();
     }
 
-    // Atualiza a senha do usuario
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@Valid @RequestBody User obj, @PathVariable Long id){
         obj.setId(id);
@@ -52,7 +49,6 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    // Deleta o usuario
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
         this.userService.delete(id);

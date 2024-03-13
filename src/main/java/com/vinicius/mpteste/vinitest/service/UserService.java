@@ -30,20 +30,17 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    //Procurar o usuario pela id
     public User findById(Long id){
 
         UserSpringSecurity userSpringSecurity = authenticated();
         if (!Objects.nonNull(userSpringSecurity) || !userSpringSecurity.hasRole(ProfileEnum.ADMIN) && !id.equals(userSpringSecurity.getId())){
             throw new AuthorizationException("Acesso Negado");
         }
-        //O Optional quer dizer que posso receber esse objeto User ou posso não receber e ficar vazio, entao pra
-        //não dar erro na aplicação o Optional faz retorar ""
         Optional<User> user = this.userRepository.findById(id);
 
         return user.orElseThrow(() -> new ObjectNotFoundException(
                 "Usuario não encontrado! id: " + id + ", tipo: " + User.class.getName()
-        ));//Nesse return eu digo ou retorna o user ou retorna o Throw
+        ));
 
     }
 
@@ -51,30 +48,25 @@ public class UserService {
     @Transactional
     public User create(User obj){
 
-        obj.setId(null);//Garante que se o usuario tentar criar um obj com alguma id ja existente no banco ele vai
-        //limpar a id exixtente e criar os novos dados
-        //Encripta a senha
+        obj.setId(null);
         obj.setPassword(this.bCryptPasswordEncoder.encode(obj.getPassword()));
-        //Garante que quando o usuario for criado ele seja criado como codigo numero 2 ou seja um USER do ProfileEnum
         obj.setProfiles(Stream.of(ProfileEnum.USER.getCode()).collect(Collectors.toSet()));
         obj = this.userRepository.save(obj);
         return obj;
     }
 
-    //Atualiza um usuario
     @Transactional
     public User update(User obj){
 
-        User newObj = findById(obj.getId());//Vai pegar o id do usuario
-        newObj.setPassword(obj.getPassword());//Permite que o usuario atualize apenas a senha
-        //Encripta a senha
+        User newObj = findById(obj.getId());
+        newObj.setPassword(obj.getPassword());
         newObj.setPassword(this.bCryptPasswordEncoder.encode(obj.getPassword()));
-        return this.userRepository.save(newObj);//Reda a query para salvar o objeto
+        return this.userRepository.save(newObj);
     }
 
     public void delete(Long id){
 
-        findById(id);//Procura a id
+        findById(id);
         try {
             this.userRepository.deleteById(id);
         }catch (Exception e){
@@ -105,7 +97,6 @@ public class UserService {
         return user;
     }
 
-    //region teste
     public List<User> findAll(User id){
         List<User> allUsers = this.userRepository.findAll();
         return allUsers;

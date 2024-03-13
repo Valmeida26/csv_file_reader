@@ -24,7 +24,7 @@ public class ErrorResponse {
 
     @Getter
     @Setter
-//o Required args constructor é um construtor apenas para as variaveis final
+    // o Required args constructor é um construtor apenas para as variaveis final
     @RequiredArgsConstructor
     private static class ValidationError {
         private final String field;

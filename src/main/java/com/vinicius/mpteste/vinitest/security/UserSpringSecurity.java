@@ -47,7 +47,6 @@ public class UserSpringSecurity implements UserDetails {
     }
 
     public boolean hasRole(ProfileEnum profileEnum){
-        //Verifica se a conta cadastrada é um User ou ADMIN
         return getAuthorities().contains(new SimpleGrantedAuthority(profileEnum.getDescription()));
     }
 }

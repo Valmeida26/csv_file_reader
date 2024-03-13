@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = Persons.TABLE_NAME)
 @AllArgsConstructor
-//Construtor vazio
 @NoArgsConstructor
-//Ja tem nele o @Getter @Setter e @EqualsAndHashCode
 @Data
 public class Persons {
 

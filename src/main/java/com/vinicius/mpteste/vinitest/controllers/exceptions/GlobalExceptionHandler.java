@@ -165,7 +165,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler imple
             WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse(httpStatus.value(), message);
         if (this.printStackTrace) {
-//            errorResponse.setStackTrace(ExceptionUtils.getStackTrace(exception));
             errorResponse.setStacktrace(ExceptionUtils.getStackTrace(exception));
         }
         return ResponseEntity.status(httpStatus).body(errorResponse);

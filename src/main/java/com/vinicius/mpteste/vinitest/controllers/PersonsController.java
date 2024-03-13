@@ -2,7 +2,6 @@ package com.vinicius.mpteste.vinitest.controllers;
 
 import com.vinicius.mpteste.vinitest.models.Persons;
 import com.vinicius.mpteste.vinitest.service.PersonsService;
-import jakarta.validation.Valid;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -13,7 +12,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,20 +35,17 @@ public class PersonsController {
     private PersonsService personsService;
 
     //region funções comuns do spring
-    // Busaco todos os usuarios no banco de dados
     @GetMapping("/All")
     public List<Persons> findAll(){
         return this.personsService.findAll();
     }
 
-    //Busca usuario no banco pela id
     @GetMapping("/{id}")
     public ResponseEntity<Persons> findbyId(@PathVariable Long id){
         Persons obj = this.personsService.findById(id);
         return ResponseEntity.ok().body(obj);
     }
 
-    //Deleta usuarios no banco
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
         this.personsService.delete(id);
@@ -115,11 +110,9 @@ public class PersonsController {
 
         List<String> data = new ArrayList<>();
 
-        // Ler o arquivo CSV e armazenar os dados em uma lista
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader());
 
-            // Processar cada linha do CSV
             for (CSVRecord record : csvParser) {
                 String line;
                 String name = record.get("Nome");
@@ -130,14 +123,11 @@ public class PersonsController {
                 String ipAccess = record.get("IpAcesso");
                 String birthDate = record.get("Nascimento");
 
-                // Corrigir data de nascimento com base na idade
                 birthDate = LocalDate.now().minusYears(age).toString();
                 LocalDate newBirthDate = LocalDate.parse(birthDate);
 
-                // Definir o formato desejado
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-                // Formatando o LocalDate para uma string com o formato desejado
                 String formattedDate = newBirthDate.format(formatter);
 
                 line = " name: " + name + " | lastName: " + lastName + " | age: " + age + " | gender: " + gender + " | e-mail: " + email
@@ -146,8 +136,6 @@ public class PersonsController {
             }
             csvParser.close();
         }
-
-        // Ordenar os dados em ordem alfabética
         Collections.sort(data);
         return data;
     }
@@ -157,7 +145,6 @@ public class PersonsController {
     @GetMapping("/upload/genders-average")
     public ResponseEntity<String> numberOfMenAndWomen(@RequestParam("file") MultipartFile file) throws IOException{
         try {
-            // Ler o arquivo CSV
             Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()));
             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader());
 
@@ -166,12 +153,10 @@ public class PersonsController {
             double maleAgeSum = 0;
             double femaleAgeSum = 0;
 
-            // Processar cada linha do CSV
             for (CSVRecord record : csvParser) {
                 int age = Integer.parseInt(record.get("Idade"));
                 String gender = record.get("Sexo");
 
-                // Contar homens e mulheres
                 if (gender.equalsIgnoreCase("male")) {
                     maleCount++;
                     maleAgeSum += age;
@@ -181,14 +166,11 @@ public class PersonsController {
                 }
 
             }
-            // Calcular média de idade para homens e mulheres
             double mediaIdadeMale = maleAgeSum / maleCount;
             double mediaIdadeFemale = femaleAgeSum / femaleCount;
 
-            // Criando um formato decimal com duas casas decimais
             DecimalFormat df = new DecimalFormat("#.##");
 
-            // Aplicando o formato ao número
             String mediaMale = df.format(mediaIdadeMale);
             String mediafemale = df.format(mediaIdadeFemale);
 
