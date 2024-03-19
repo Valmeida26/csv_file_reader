@@ -25,6 +25,6 @@ public enum ProfileEnum {
                 return x;
             }
         }
-        throw new IllegalArgumentException("Invalid code: " + code);
+        throw new IllegalArgumentException("Código inválido: " + code);
     }
 }

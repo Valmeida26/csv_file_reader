@@ -1,7 +1,7 @@
 package com.vinicius.mpteste.vinitest.service;
 
 import com.vinicius.mpteste.vinitest.CSVHelper;
-import com.vinicius.mpteste.vinitest.models.Persons;
+import com.vinicius.mpteste.vinitest.models.Clients;
 import com.vinicius.mpteste.vinitest.repositoreis.PersonsRepository;
 import com.vinicius.mpteste.vinitest.repositoreis.UserRepository;
 import jakarta.transaction.Transactional;
@@ -20,18 +20,19 @@ public class PersonsService {
     @Autowired
     private PersonsRepository personsRepository;
 
-    public List<Persons> findAll(){
+    public List<Clients> findAll(){
         return this.personsRepository.findAll();
     }
-    public Persons findById(Long id){
-        Optional<Persons> persons = this.personsRepository.findById(id);
+
+    public Clients findById(Long id){
+        Optional<Clients> persons = this.personsRepository.findById(id);
         return persons.orElseThrow(() -> new RuntimeException(
-                "Pessoa não encontrada! id: " + id + ", Tipo: " + Persons.class.getName()
+                "Pessoa não encontrada! id: " + id + ", Tipo: " + Clients.class.getName()
         ));
     }
 
     @Transactional
-    public void create(Persons obj){
+    public void create(Clients obj){
         obj.setId(null);
         obj = this.personsRepository.save(obj);
     }
@@ -45,9 +46,9 @@ public class PersonsService {
         }
     }
 
-    //Teste de download
+    //Download do CSV
     public ByteArrayInputStream load() {
-        List<Persons> csvDownload = personsRepository.findAll();
+        List<Clients> csvDownload = personsRepository.findAll();
         return CSVHelper.downloadCSV(csvDownload);
     }
 }

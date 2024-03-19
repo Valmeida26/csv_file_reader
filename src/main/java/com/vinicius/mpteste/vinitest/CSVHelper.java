@@ -1,6 +1,6 @@
 package com.vinicius.mpteste.vinitest;
 
-import com.vinicius.mpteste.vinitest.models.Persons;
+import com.vinicius.mpteste.vinitest.models.Clients;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.QuoteMode;
@@ -11,20 +11,20 @@ import java.util.List;
 
 public class CSVHelper {
 
-    public static ByteArrayInputStream downloadCSV(List<Persons> tutorials) {
+    public static ByteArrayInputStream downloadCSV(List<Clients> tutorials) {
         final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(QuoteMode.MINIMAL);
 
         try (ByteArrayOutputStream out = new ByteArrayOutputStream();
              CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);) {
-            for (Persons persons : tutorials) {
+            for (Clients persons : tutorials) {
                 List<? extends Serializable> data = Arrays.asList(
-                        persons.getNome(),
-                        persons.getUltimoNome(),
-                        persons.getIdade(),
+                        persons.getName(),
+                        persons.getLastName(),
+                        persons.getAge(),
                         persons.getEmail(),
-                        persons.getSexo(),
-                        persons.getIpAcesso(),
-                        persons.getNascimento()
+                        persons.getGender(),
+                        persons.getIpAccess(),
+                        persons.getBirthDate()
                 );
 
                 csvPrinter.printRecord(data);

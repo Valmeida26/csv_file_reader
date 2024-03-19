@@ -40,13 +40,13 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         filterChain.doFilter(request, response);
     }
 
+    // verifica se o token é valido
     private UsernamePasswordAuthenticationToken getAuthentication(String token) {
         if (this.jwtUtil.isValidToken(token)) {
             String username = this.jwtUtil.getUsername(token);
             UserDetails user = this.userDetailsService.loadUserByUsername(username);
-            UsernamePasswordAuthenticationToken authenticatedUser = new UsernamePasswordAuthenticationToken(user, null,
+            return new UsernamePasswordAuthenticationToken(user, null,
                     user.getAuthorities());
-            return authenticatedUser;
         }
         return null;
     }

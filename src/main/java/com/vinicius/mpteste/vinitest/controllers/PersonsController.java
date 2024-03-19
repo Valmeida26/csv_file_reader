@@ -1,6 +1,6 @@
 package com.vinicius.mpteste.vinitest.controllers;
 
-import com.vinicius.mpteste.vinitest.models.Persons;
+import com.vinicius.mpteste.vinitest.models.Clients;
 import com.vinicius.mpteste.vinitest.service.PersonsService;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -36,13 +36,13 @@ public class PersonsController {
 
     //region funções comuns do spring
     @GetMapping("/All")
-    public List<Persons> findAll(){
+    public List<Clients> findAll(){
         return this.personsService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Persons> findbyId(@PathVariable Long id){
-        Persons obj = this.personsService.findById(id);
+    public ResponseEntity<Clients> findbyId(@PathVariable Long id){
+        Clients obj = this.personsService.findById(id);
         return ResponseEntity.ok().body(obj);
     }
 
@@ -60,7 +60,7 @@ public class PersonsController {
             // Ler o arquivo CSV
             Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()));
             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader());
-            List<Persons> personsList = new ArrayList<>(); // Lista para armazenar as pessoas do CSV
+            List<Clients> personsList = new ArrayList<>(); // Lista para armazenar as pessoas do CSV
 
             // Processar cada linha do CSV e adicionar à lista
             for (CSVRecord record : csvParser) {
@@ -72,7 +72,7 @@ public class PersonsController {
                 String ipAccess = record.get("IpAcesso");
                 String birthDate = record.get("Nascimento");
 
-                // Corrigir data de nascimento com base na idade
+                // Corrigir data de birthDate com base na age
                 birthDate = LocalDate.now().minusYears(age).toString();
                 LocalDate newBirthDate = LocalDate.parse(birthDate);
 
@@ -83,16 +83,16 @@ public class PersonsController {
                 String formattedDate = newBirthDate.format(formatter);
 
                 // Adicionar a pessoa à lista
-                Persons person = new Persons(name, lastName, email, gender, ipAccess, age, formattedDate);
+                Clients person = new Clients(name, lastName, email, gender, ipAccess, age, formattedDate);
                 personsList.add(person);
             }
 
-            // Ordenar a lista de pessoas por nome e sobrenome
-            personsList.sort(Comparator.comparing(Persons::getNome)
-                    .thenComparing(Persons::getUltimoNome));
+            // Ordenar a lista de pessoas por name e sobrenome
+            personsList.sort(Comparator.comparing(Clients::getName)
+                    .thenComparing(Clients::getLastName));
 
             // Persistir os dados no banco de dados
-            for (Persons person : personsList) {
+            for (Clients person : personsList) {
                 personsService.create(person);
             }
             csvParser.close();
@@ -105,7 +105,7 @@ public class PersonsController {
     //endregion
 
     //region Retorna na tela em ordem alfabetica
-    @GetMapping("/upload/nome")
+    @GetMapping("/upload/name")
     public List<String> orderAlphabetical(@RequestParam("file") MultipartFile file) throws IOException {
 
         List<String> data = new ArrayList<>();
@@ -141,7 +141,7 @@ public class PersonsController {
     }
     //endregion
 
-    //region Retorna na tela o numero de homens e mulheres e suas medias de idade
+    //region Retorna na tela o numero de homens e mulheres e suas medias de age
     @GetMapping("/upload/genders-average")
     public ResponseEntity<String> numberOfMenAndWomen(@RequestParam("file") MultipartFile file) throws IOException{
         try {

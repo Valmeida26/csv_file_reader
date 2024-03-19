@@ -36,6 +36,7 @@ public class User {
     @NotBlank
     @Size(min = 8, max = 60)
     private String password;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @CollectionTable(name = "user_profile")

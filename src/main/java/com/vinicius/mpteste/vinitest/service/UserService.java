@@ -70,7 +70,7 @@ public class UserService {
         try {
             this.userRepository.deleteById(id);
         }catch (Exception e){
-            throw new DataBindingViolationException("Não é possível deletar pois há entidades relacionadas à essa id");
+            throw new DataBindingViolationException("Não é possível deletar!");
         }
     }
 
@@ -98,8 +98,7 @@ public class UserService {
     }
 
     public List<User> findAll(User id){
-        List<User> allUsers = this.userRepository.findAll();
-        return allUsers;
+        return this.userRepository.findAll();
     }
     //endregion
 }
